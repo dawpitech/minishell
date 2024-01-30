@@ -31,6 +31,8 @@ NAME	=	mysh
 T_NAME	=	unit_tests
 
 SRC = ./sources/core/minishell.c
+SRC	+=	./sources/parser/my_parser.c
+SRC	+=	./sources/builtins/exit_cmd.c
 
 T_SRC	:=	$(SRC)
 
