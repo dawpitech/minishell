@@ -16,7 +16,7 @@ typedef struct {
     int (*fptr)(void);
 } builtin_t;
 static const builtin_t builtins_list[] = {
-        {.cmd = "exit", .fptr = execute_exit},
-        {.cmd = NULL, .fptr = NULL}
+    {.cmd = "exit", .fptr = execute_exit},
+    {.cmd = NULL, .fptr = NULL}
 };
 #endif //MINISHELL_BUILTINS_H

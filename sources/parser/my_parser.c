@@ -14,14 +14,16 @@
 
 int parse_input(char *input)
 {
+    pid_t pid;
+    static char *argv[] = {"ls", NULL};
+
     for (int i = 0; builtins_list[i].cmd != NULL; i += 1) {
         if (my_strcmp(builtins_list[i].cmd, input) == 0) {
             return builtins_list[i].fptr();
         }
     }
-    pid_t pid = fork();
+    pid = fork();
     if (pid == 0) {
-        static char *argv[]={"ls", NULL};
         execv("/usr/bin/env", argv);
         exit(127);
     } else {

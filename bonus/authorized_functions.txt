@@ -26,3 +26,5 @@ getpid
 sterror
 perror
 strsignal
+memset
+stdin

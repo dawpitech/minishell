@@ -35,6 +35,7 @@ SRC	+=	./sources/parser/my_parser.c
 SRC	+=	./sources/builtins/exit_cmd.c
 
 T_SRC	:=	$(SRC)
+T_SRC	+=	./tests/my_tests.c
 
 SRC	+=	./main.c
 
