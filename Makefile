@@ -1,6 +1,6 @@
 ##
 ## EPITECH PROJECT, 2023
-## Navy
+## Minishell
 ## File description:
 ## Main Makefile of the project
 ##
@@ -15,14 +15,14 @@ CFLAGS	+=	-Wshadow
 CFLAGS	+=	-Wunreachable-code
 CFLAGS	+=	-Wmissing-prototypes
 CFLAGS	+=	-Wno-unknown-pragmas
-CFLAGS	+=	-pedantic
+CFLAGS	+=	-pedantic -g3
 CFLAGS	+=	-I./include/
 
 T_CFLAGS	:= $(CFLAGS)
 T_CFLAGS	+=	-lcriterion
 T_CFLAGS	+=	--coverage
 
-LIBS_FLAGS	=	-L./lib/ -lmy
+LIBS_FLAGS	=	-L./lib/ -lmy -lhashtable
 
 BDIR	=	.build
 T_BDIR	=	.buildTests
@@ -33,6 +33,8 @@ T_NAME	=	unit_tests
 SRC = ./sources/core/minishell.c
 SRC	+=	./sources/parser/my_parser.c
 SRC	+=	./sources/builtins/exit_cmd.c
+SRC	+=	./sources/utils/str_toolbox.c
+SRC	+=	./sources/utils/mem_toolbox.c
 
 T_SRC	:=	$(SRC)
 T_SRC	+=	./tests/my_tests.c
@@ -72,7 +74,8 @@ tests_run_pp:	$(T_NAME)
 	@ gcovr --exclude=tests --html-details $(GCOVR_OUTPUT)/output.html
 
 build_lib:
-	@ make -C ./lib/my
+	@ make -C ./lib/my/
+	@ make -C ./lib/hashtable/
 
 clean:
 	@ rm -f $(T_OBJ)
@@ -84,7 +87,8 @@ clean:
 fclean:	clean
 	@ rm -f $(NAME)
 	@ rm -f $(T_NAME)
-	@ make -C ./lib/my fclean
+	@ make -C ./lib/my/ fclean
+	@ make -C ./lib/hashtable/ fclean
 
 re:	fclean all
 
