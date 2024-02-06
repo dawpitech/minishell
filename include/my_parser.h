@@ -7,5 +7,6 @@
 
 #ifndef MINISHELL_MY_PARSER_H
     #define MINISHELL_MY_PARSER_H
-int parse_input(char *input);
+    #include "minishell.h"
+int parse_input(context_t *context, char *input);
 #endif //MINISHELL_MY_PARSER_H

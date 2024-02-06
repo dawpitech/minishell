@@ -7,5 +7,7 @@
 
 #ifndef MINISHELL_EXIT_CMD_H
     #define MINISHELL_EXIT_CMD_H
-int execute_exit(void);
+    #include "minishell.h"
+int execute_exit(context_t *context);
+int execute_env(context_t *context);
 #endif //MINISHELL_EXIT_CMD_H

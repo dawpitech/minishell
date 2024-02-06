@@ -11,18 +11,21 @@
 
 char *my_strtok(char *str, char separator)
 {
-    static int current_index = 0;
-    char *begin_of_str = &(str[current_index]);
+    static char *current_str = NULL;
+    char *begin_of_str;
 
-    if (str == NULL || str[current_index] == '\0')
+    if (str != NULL)
+        current_str = str;
+    if (current_str == NULL || *current_str == '\0')
         return NULL;
-    while (str[current_index] != '\0') {
-        if (str[current_index] == separator) {
-            str[current_index] = '\0';
-            current_index += 1;
-            return begin_of_str;
-        }
-        current_index += 1;
+    while (*current_str == separator)
+        current_str += 1;
+    begin_of_str = current_str;
+    while (*current_str != '\0' && *current_str != separator)
+        current_str += 1;
+    if (*current_str != '\0') {
+        *current_str = '\0';
+        current_str += 1;
     }
     return begin_of_str;
 }

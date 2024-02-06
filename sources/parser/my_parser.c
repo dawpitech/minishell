@@ -5,29 +5,16 @@
 ** my_parser header
 */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/wait.h>
 #include "my_parser.h"
 #include "builtins.h"
-#include "my.h"
+#include "builtins_runner.h"
 
-int parse_input(char *input)
+int parse_input(context_t *context, char *input)
 {
-    pid_t pid;
-    static char *argv[] = {"ls", NULL};
+    int rt_value;
 
-    for (int i = 0; builtins_list[i].cmd != NULL; i += 1) {
-        if (my_strcmp(builtins_list[i].cmd, input) == 0) {
-            return builtins_list[i].fptr();
-        }
-    }
-    pid = fork();
-    if (pid == 0) {
-        execv("/usr/bin/env", argv);
-        exit(127);
-    } else {
-        waitpid(pid, 0, 0);
-    }
-    return 0;
+    rt_value = search_and_run_builtins(context, input);
+    if (rt_value != NO_CMD_FOUND)
+        return rt_value;
+    return EXIT_SUCCESS_TECH;
 }
