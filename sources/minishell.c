@@ -28,11 +28,15 @@ int minishell(__attribute__((unused)) int argc,
     __attribute__((unused)) char **argv, char **env)
 {
     context_t context = {0};
+    int rt_value;
 
     if (initialize_shell(&context, env) != EXIT_SUCCESS_TECH)
         return EXIT_FAILURE_TECH;
-    while (context.running)
-        launch_prompt(&context);
+    while (context.running) {
+        rt_value = launch_prompt(&context);
+        if (rt_value != EXIT_SUCCESS_TECH)
+            break;
+    }
     exiting_hook(&context);
-    return EXIT_SUCCESS_TECH;
+    return rt_value;
 }
