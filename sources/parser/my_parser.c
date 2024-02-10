@@ -38,7 +38,7 @@ int parse_input(context_t *context, char *input)
     context->args = parse_args(input);
     if (context->args == NULL || context->args[0] == NULL) {
         free(context->args);
-        return EXIT_FAILURE_TECH;
+        return context->args == NULL ? EXIT_FAILURE_TECH : EXIT_SUCCESS_TECH;
     }
     rt_value = search_and_run_builtins(context, context->args[0]);
     free(context->args);
