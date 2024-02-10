@@ -20,6 +20,21 @@ int calculate_nb_args(context_t *context)
     return i;
 }
 
+int execute_unsetenv(context_t *context)
+{
+    int argc = calculate_nb_args(context);
+
+    if (argc < 2) {
+        my_printf("Error: not enough arguments");
+        return EXIT_FAILURE_TECH;
+    }
+    if (argc > 2) {
+        my_printf("Error: too many arguments");
+        return EXIT_FAILURE_TECH;
+    }
+    return remove_env_var(context, context->args[1]);
+}
+
 int execute_exit(context_t *context)
 {
     context->running = false;

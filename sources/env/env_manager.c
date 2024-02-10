@@ -10,7 +10,6 @@
 
 #include "../../include/env_manager.h"
 #include "../../include/my.h"
-#include "../../include/my_printf.h"
 #include "../../include/str_toolbox.h"
 
 int add_env_var(context_t *context, char *key, char *value)
@@ -31,6 +30,28 @@ int add_env_var(context_t *context, char *key, char *value)
         last = &(*last)->next;
     (*last)->next = new;
     return EXIT_SUCCESS_TECH;
+}
+
+int remove_env_var(context_t *context, char *key)
+{
+    env_var_t *prev = NULL;
+    env_var_t *curr = context->env_var;
+    bool is_remove = false;
+
+    while (curr != NULL) {
+        if (my_strcmp(curr->key, key) == 0) {
+            if (prev != NULL)
+                prev->next = curr->next;
+            else
+                context->env_var = curr->next;
+            free(curr);
+            is_remove = true;
+            break;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+    return is_remove ? EXIT_SUCCESS_TECH : EXIT_FAILURE_TECH;
 }
 
 int parse_source_env_var(context_t *context, char **env)

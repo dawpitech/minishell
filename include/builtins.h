@@ -20,6 +20,7 @@ static const builtin_t builtins_list[] = {
     {.cmd = "env", .fptr = execute_env},
     {.cmd = "exit", .fptr = execute_exit},
     {.cmd = "setenv", .fptr = execute_setenv},
+    {.cmd = "unsetenv", .fptr = execute_unsetenv},
     {.cmd = NULL, .fptr = NULL}
 };
 #endif //MINISHELL_BUILTINS_H
