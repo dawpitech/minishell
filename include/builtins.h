@@ -10,7 +10,7 @@
     #define NO_CMD_FOUND 42
     #include <stddef.h>
 
-    #include "exit_cmd.h"
+    #include "builtins_cmd.h"
     #include "minishell.h"
 typedef struct {
     char *cmd;
@@ -19,6 +19,7 @@ typedef struct {
 static const builtin_t builtins_list[] = {
     {.cmd = "env", .fptr = execute_env},
     {.cmd = "exit", .fptr = execute_exit},
+    {.cmd = "setenv", .fptr = execute_setenv},
     {.cmd = NULL, .fptr = NULL}
 };
 #endif //MINISHELL_BUILTINS_H

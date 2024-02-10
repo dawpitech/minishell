@@ -32,9 +32,11 @@ char *get_from_stdin(void)
 int launch_prompt(context_t *context)
 {
     char *command;
+    int rt_value;
 
     my_printf("> $ ");
     command = get_from_stdin();
-    parse_input(context, command);
-    return EXIT_SUCCESS_TECH;
+    rt_value = parse_input(context, command);
+    free(command);
+    return rt_value;
 }

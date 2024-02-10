@@ -30,7 +30,7 @@ T_BDIR	=	.buildTests
 NAME	=	mysh
 T_NAME	=	unit_tests
 
-SRC = ./sources/core/minishell.c
+SRC = ./sources/minishell.c
 SRC	+=	./sources/env/env_manager.c
 SRC	+=	./sources/parser/my_parser.c
 SRC	+=	./sources/builtins/builtins_cmd.c
