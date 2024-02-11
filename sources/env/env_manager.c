@@ -12,6 +12,15 @@
 #include "../../include/my.h"
 #include "../../include/str_toolbox.h"
 
+static
+void mov_ptr_to_delete(env_var_t *prev, env_var_t *curr, context_t *context)
+{
+    if (prev != NULL)
+        prev->next = curr->next;
+    else
+        context->env_var = curr->next;
+}
+
 env_var_t *get_env_var(context_t *context, char *key)
 {
     env_var_t *curr = context->env_var;
@@ -52,10 +61,7 @@ int remove_env_var(context_t *context, char *key)
 
     while (curr != NULL) {
         if (my_strcmp(curr->key, key) == 0) {
-            if (prev != NULL)
-                prev->next = curr->next;
-            else
-                context->env_var = curr->next;
+            mov_ptr_to_delete(prev, curr, context);
             free(curr);
             is_remove = true;
             break;

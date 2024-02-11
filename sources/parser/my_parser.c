@@ -27,7 +27,7 @@ char **parse_args(char *input)
         args[nb_of_args - 1] = arg;
         nb_of_args += 1;
         arg = my_strtok(NULL, ' ');
-    } while(arg != NULL);
+    } while (arg != NULL);
     args[nb_of_args - 1] = NULL;
     return args;
 }
