@@ -8,6 +8,7 @@
 #ifndef MINISHELL_ENV_MANAGER_H
     #define MINISHELL_ENV_MANAGER_H
     #include "minishell.h"
+env_var_t *get_env_var(context_t *context, char *key);
 int add_env_var(context_t *context, char *key, char *value);
 int parse_source_env_var(context_t *context, char **env);
 void free_env_var(context_t *context);

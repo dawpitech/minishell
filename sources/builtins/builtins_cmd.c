@@ -10,6 +10,7 @@
 #include "builtins_cmd.h"
 #include "env_manager.h"
 #include "my_printf.h"
+#include "my_put_stderr.h"
 
 static
 int calculate_nb_args(context_t *context)
@@ -25,11 +26,11 @@ int execute_unsetenv(context_t *context)
     int argc = calculate_nb_args(context);
 
     if (argc < 2) {
-        my_printf("Error: not enough arguments");
+        my_put_stderr("Error: not enough arguments");
         return EXIT_FAILURE_TECH;
     }
     if (argc > 2) {
-        my_printf("Error: too many arguments");
+        my_put_stderr("Error: too many arguments");
         return EXIT_FAILURE_TECH;
     }
     return remove_env_var(context, context->args[1]);
@@ -46,11 +47,11 @@ int execute_setenv(context_t *context)
     int argc = calculate_nb_args(context);
 
     if (argc < 3) {
-        my_printf("Error: not enough arguments");
+        my_put_stderr("Error: not enough arguments");
         return EXIT_FAILURE_TECH;
     }
     if (argc > 3) {
-        my_printf("Error: too many arguments");
+        my_put_stderr("Error: too many arguments");
         return EXIT_FAILURE_TECH;
     }
     return add_env_var(context, context->args[1], context->args[2]);

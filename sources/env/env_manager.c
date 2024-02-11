@@ -12,6 +12,18 @@
 #include "../../include/my.h"
 #include "../../include/str_toolbox.h"
 
+env_var_t *get_env_var(context_t *context, char *key)
+{
+    env_var_t *curr = context->env_var;
+
+    while (curr != NULL) {
+        if (my_strcmp(curr->key, key) == 0)
+            return curr;
+        curr = curr->next;
+    }
+    return NULL;
+}
+
 int add_env_var(context_t *context, char *key, char *value)
 {
     env_var_t **last = &context->env_var;

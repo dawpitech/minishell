@@ -5,13 +5,14 @@
 ** my_parser header
 */
 
+#include <malloc.h>
+
 #include "my_parser.h"
 #include "builtins.h"
 #include "builtins_runner.h"
+#include "launcher.h"
 #include "mem_toolbox.h"
-#include "my_printf.h"
 #include "str_toolbox.h"
-#include <malloc.h>
 
 static
 char **parse_args(char *input)
@@ -41,6 +42,8 @@ int parse_input(context_t *context, char *input)
         return context->args == NULL ? EXIT_FAILURE_TECH : EXIT_SUCCESS_TECH;
     }
     rt_value = search_and_run_builtins(context, context->args[0]);
+    if (rt_value == NO_CMD_FOUND)
+        rt_value = launch_bin(context);
     free(context->args);
     context->args = NULL;
     if (rt_value != NO_CMD_FOUND)
