@@ -70,7 +70,7 @@ jobs:
         run: nix run github:dawoox/efc mysh
 
   mirror:
-    needs: [ coding_style, banned_functions_checker ]
+    needs: [ coding_style, banned_function_checker ]
     runs-on: ubuntu-latest
 
     steps:
