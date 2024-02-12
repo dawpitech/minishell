@@ -21,9 +21,9 @@ int calculate_nb_args(shell_t *context)
     return i;
 }
 
-int execute_unsetenv(shell_t *context)
+int execute_unsetenv(shell_t *shell)
 {
-    int argc = calculate_nb_args(context);
+    int argc = calculate_nb_args(shell);
 
     if (argc < 2) {
         my_put_stderr("Error: not enough arguments");
@@ -33,7 +33,7 @@ int execute_unsetenv(shell_t *context)
         my_put_stderr("Error: too many arguments");
         return EXIT_FAILURE_TECH;
     }
-    return remove_env_var(context, context->args[1]);
+    return remove_env_var(shell, shell->args[1]);
 }
 
 int execute_exit(shell_t *context)
@@ -42,19 +42,19 @@ int execute_exit(shell_t *context)
     return EXIT_SUCCESS_TECH;
 }
 
-int execute_setenv(shell_t *context)
+int execute_setenv(shell_t *shell)
 {
-    int argc = calculate_nb_args(context);
+    int argc = calculate_nb_args(shell);
 
-    if (argc < 3) {
-        my_put_stderr("Error: not enough arguments");
-        return EXIT_FAILURE_TECH;
-    }
     if (argc > 3) {
         my_put_stderr("Error: too many arguments");
         return EXIT_FAILURE_TECH;
     }
-    return add_env_var(context, context->args[1], context->args[2]);
+    if (argc == 1)
+        return execute_env(shell);
+    if (argc == 2)
+        return add_env_var(shell, shell->args[1], NULL);
+    return add_env_var(shell, shell->args[1], shell->args[2]);
 }
 
 int execute_env(shell_t *context)

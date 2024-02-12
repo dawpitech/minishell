@@ -6,6 +6,7 @@
 */
 
 #include <unistd.h>
+
 #include "../include/minishell.h"
 #include "../include/env_manager.h"
 #include "../include/prompt.h"

@@ -10,6 +10,6 @@
     #include "minishell.h"
 int execute_exit(shell_t *context);
 int execute_env(shell_t *context);
-int execute_setenv(shell_t *context);
-int execute_unsetenv(shell_t *context);
+int execute_setenv(shell_t *shell);
+int execute_unsetenv(shell_t *shell);
 #endif //MINISHELL_BUILTINS_CMD_H
