@@ -68,3 +68,23 @@ jobs:
 
       - name: Check for banned functions
         run: nix run github:dawoox/efc mysh
+
+  mirror:
+    needs: [ coding_style, banned_functions_checker ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: $SSH_PUB_KEY
+
+      - name: Push to epitech
+        run: |
+          git fetch --unshallow origin
+          git remote add epitech "${{ secrets.MIRROR_REPO }}"
+          git push epitech --force
