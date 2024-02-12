@@ -26,11 +26,7 @@ int execute_unsetenv(shell_t *shell)
     int argc = calculate_nb_args(shell);
 
     if (argc < 2) {
-        my_put_stderr("Error: not enough arguments");
-        return EXIT_FAILURE_TECH;
-    }
-    if (argc > 2) {
-        my_put_stderr("Error: too many arguments");
+        my_put_stderr("unsetenv: Too few arguments.");
         return EXIT_FAILURE_TECH;
     }
     return remove_env_var(shell, shell->args[1]);
