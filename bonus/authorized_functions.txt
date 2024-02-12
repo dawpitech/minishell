@@ -30,3 +30,6 @@ getpid
 strerror
 perror
 strsignal
+# List of things that are optimized but shouldn't be used
+memset
+stdin
