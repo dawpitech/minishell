@@ -47,7 +47,7 @@ int execute_setenv(shell_t *shell)
     int argc = calculate_nb_args(shell);
 
     if (argc > 3) {
-        my_put_stderr("Error: too many arguments");
+        my_put_stderr("setenv: Too many arguments.\n");
         return EXIT_FAILURE_TECH;
     }
     if (argc == 1)
