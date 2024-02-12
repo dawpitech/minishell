@@ -32,6 +32,7 @@ T_NAME	=	unit_tests
 
 SRC = ./sources/minishell.c
 SRC	+=	./sources/env/env_manager.c
+SRC	+=	./sources/env/env_converter.c
 SRC	+=	./sources/parser/my_parser.c
 SRC	+=	./sources/builtins/builtins_cmd.c
 SRC	+=	./sources/builtins/builtins_runner.c

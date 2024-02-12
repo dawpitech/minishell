@@ -5,21 +5,23 @@
 ** minishell header
 */
 
+#include <unistd.h>
 #include "../include/minishell.h"
 #include "../include/env_manager.h"
 #include "../include/prompt.h"
 
 static
-int initialize_shell(context_t *context, char **env)
+int initialize_shell(shell_t *shell, char **env)
 {
-    if (parse_source_env_var(context, env) == EXIT_FAILURE_TECH)
-        return EXIT_FAILURE_TECH;
-    context->running = true;
-    return EXIT_SUCCESS_TECH;
+    if (parse_source_env_var(shell, env) == RET_ERROR)
+        return RET_ERROR;
+    shell->running = true;
+    shell->isatty = isatty(STDIN_FILENO);
+    return RET_VALID;
 }
 
 static
-void exiting_hook(context_t *context)
+void exiting_hook(shell_t *context)
 {
     free_env_var(context);
 }
@@ -27,12 +29,12 @@ void exiting_hook(context_t *context)
 int minishell(__attribute__((unused)) int argc,
     __attribute__((unused)) char **argv, char **env)
 {
-    context_t context = {0};
+    shell_t shell = {0};
 
-    if (initialize_shell(&context, env) != EXIT_SUCCESS_TECH)
+    if (initialize_shell(&shell, env) != EXIT_SUCCESS_TECH)
         return EXIT_FAILURE_TECH;
-    while (context.running)
-        launch_prompt(&context);
-    exiting_hook(&context);
+    while (shell.running)
+        launch_prompt(&shell);
+    exiting_hook(&shell);
     return EXIT_SUCCESS_TECH;
 }

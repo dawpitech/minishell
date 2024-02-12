@@ -13,7 +13,7 @@
 #include "../../include/my_printf.h"
 #include "../../include/str_toolbox.h"
 
-char *search_bin(context_t *context)
+char *search_bin(shell_t *context)
 {
     char *path = my_strdup(get_env_var(context, "PATH")->value);
     char *result = my_strtok(path, ':');

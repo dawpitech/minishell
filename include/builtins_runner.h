@@ -8,5 +8,5 @@
 #ifndef MINISHELL_BUILTINS_RUNNER_H
     #define MINISHELL_BUILTINS_RUNNER_H
     #include "minishell.h"
-int search_and_run_builtins(context_t *context, char *command);
+int search_and_run_builtins(shell_t *context, char *command);
 #endif //MINISHELL_BUILTINS_RUNNER_H

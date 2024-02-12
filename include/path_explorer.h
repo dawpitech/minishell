@@ -8,5 +8,5 @@
 #ifndef MINISHELL_PATH_EXPLORER_H
     #define MINISHELL_PATH_EXPLORER_H
     #include "minishell.h"
-char *search_bin(context_t *context);
+char *search_bin(shell_t *context);
 #endif //MINISHELL_PATH_EXPLORER_H

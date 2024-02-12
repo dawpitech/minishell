@@ -13,7 +13,7 @@
 #include "my_put_stderr.h"
 
 static
-int calculate_nb_args(context_t *context)
+int calculate_nb_args(shell_t *context)
 {
     int i;
 
@@ -21,7 +21,7 @@ int calculate_nb_args(context_t *context)
     return i;
 }
 
-int execute_unsetenv(context_t *context)
+int execute_unsetenv(shell_t *context)
 {
     int argc = calculate_nb_args(context);
 
@@ -36,13 +36,13 @@ int execute_unsetenv(context_t *context)
     return remove_env_var(context, context->args[1]);
 }
 
-int execute_exit(context_t *context)
+int execute_exit(shell_t *context)
 {
     context->running = false;
     return EXIT_SUCCESS_TECH;
 }
 
-int execute_setenv(context_t *context)
+int execute_setenv(shell_t *context)
 {
     int argc = calculate_nb_args(context);
 
@@ -57,7 +57,7 @@ int execute_setenv(context_t *context)
     return add_env_var(context, context->args[1], context->args[2]);
 }
 
-int execute_env(context_t *context)
+int execute_env(shell_t *context)
 {
     env_var_t *curr = context->env_var;
 

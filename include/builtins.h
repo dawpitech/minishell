@@ -14,7 +14,7 @@
     #include "minishell.h"
 typedef struct {
     char *cmd;
-    int (*fptr)(context_t *context);
+    int (*fptr)(shell_t *context);
 } builtin_t;
 static const builtin_t builtins_list[] = {
     {.cmd = "env", .fptr = execute_env},

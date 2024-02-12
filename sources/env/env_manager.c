@@ -13,7 +13,7 @@
 #include "../../include/str_toolbox.h"
 
 static
-void mov_ptr_to_delete(env_var_t *prev, env_var_t *curr, context_t *context)
+void mov_ptr_to_delete(env_var_t *prev, env_var_t *curr, shell_t *context)
 {
     if (prev != NULL)
         prev->next = curr->next;
@@ -21,7 +21,7 @@ void mov_ptr_to_delete(env_var_t *prev, env_var_t *curr, context_t *context)
         context->env_var = curr->next;
 }
 
-env_var_t *get_env_var(context_t *context, char *key)
+env_var_t *get_env_var(shell_t *context, char *key)
 {
     env_var_t *curr = context->env_var;
 
@@ -33,7 +33,7 @@ env_var_t *get_env_var(context_t *context, char *key)
     return NULL;
 }
 
-int add_env_var(context_t *context, char *key, char *value)
+int add_env_var(shell_t *context, char *key, char *value)
 {
     env_var_t **last = &context->env_var;
     env_var_t *new = malloc(sizeof(env_var_t));
@@ -43,6 +43,7 @@ int add_env_var(context_t *context, char *key, char *value)
     new->key = my_strdup(key);
     new->value = my_strdup(value);
     new->next = NULL;
+    context->nb_env_var += 1;
     if (*last == NULL) {
         *last = new;
         return EXIT_SUCCESS_TECH;
@@ -53,7 +54,7 @@ int add_env_var(context_t *context, char *key, char *value)
     return EXIT_SUCCESS_TECH;
 }
 
-int remove_env_var(context_t *context, char *key)
+int remove_env_var(shell_t *context, char *key)
 {
     env_var_t *prev = NULL;
     env_var_t *curr = context->env_var;
@@ -69,10 +70,12 @@ int remove_env_var(context_t *context, char *key)
         prev = curr;
         curr = curr->next;
     }
+    if (is_remove)
+        context->nb_env_var -= 1;
     return is_remove ? EXIT_SUCCESS_TECH : EXIT_FAILURE_TECH;
 }
 
-int parse_source_env_var(context_t *context, char **env)
+int parse_source_env_var(shell_t *context, char **env)
 {
     char *current_str;
     char *key;
@@ -89,7 +92,7 @@ int parse_source_env_var(context_t *context, char **env)
     return EXIT_SUCCESS_TECH;
 }
 
-void free_env_var(context_t *context)
+void free_env_var(shell_t *context)
 {
     env_var_t *curr = context->env_var;
     env_var_t *prev = NULL;
@@ -101,4 +104,5 @@ void free_env_var(context_t *context)
         free(prev->key);
         free(prev);
     }
+    context->nb_env_var = -1;
 }

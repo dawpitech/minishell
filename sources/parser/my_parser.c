@@ -32,7 +32,7 @@ char **parse_args(char *input)
     return args;
 }
 
-int parse_input(context_t *context, char *input)
+int parse_input(shell_t *context, char *input)
 {
     int rt_value;
 

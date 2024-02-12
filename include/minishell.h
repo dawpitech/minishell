@@ -7,9 +7,10 @@
 
 #ifndef MINISHELL_MINISHELL_H
     #define MINISHELL_MINISHELL_H
+    #define RET_ERROR 84
+    #define RET_VALID 0
     #define EXIT_FAILURE_TECH 84
     #define EXIT_SUCCESS_TECH 0
-    #define DEFAULT_LOG_LEVEL 6
     #include <stdbool.h>
 
     #include "hashtable.h"
@@ -22,7 +23,9 @@ typedef struct env_var_s {
 } env_var_t;
 typedef struct {
     env_var_t *env_var;
+    int nb_env_var;
     bool running;
+    bool isatty;
     char **args;
-} context_t;
+} shell_t;
 #endif //MINISHELL_MINISHELL_H

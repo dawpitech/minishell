@@ -29,13 +29,18 @@ char *get_from_stdin(void)
     return line;
 }
 
-int launch_prompt(context_t *context)
+int launch_prompt(shell_t *context)
 {
     char *command;
     int rt_value;
 
-    my_printf("> $ ");
+    if (context->isatty)
+        my_printf("> $ ");
     command = get_from_stdin();
+    if (command == NULL) {
+        context->running = false;
+        return 0;
+    }
     rt_value = parse_input(context, command);
     free(command);
     return rt_value;
