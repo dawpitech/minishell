@@ -31,7 +31,8 @@ int launch_bin_by_env_path(shell_t *shell)
 
     if (bin_loc == NULL)
         return RET_ERROR;
-    full_path = malloc(sizeof(char) * (my_strlen(bin_loc) + my_strlen(shell->args[0]) + 2));
+    full_path = malloc(sizeof(char) * (my_strlen(bin_loc)
+        + my_strlen(shell->args[0]) + 2));
     if (full_path == NULL)
         return RET_ERROR;
     my_strcpy(full_path, bin_loc);
