@@ -13,6 +13,7 @@
 #include "launcher.h"
 #include "mem_toolbox.h"
 #include "str_toolbox.h"
+#include "my_put_stderr.h"
 
 static
 char **parse_args(char *input)
@@ -44,9 +45,11 @@ int parse_input(shell_t *context, char *input)
     rt_value = search_and_run_builtins(context, context->args[0]);
     if (rt_value == NO_CMD_FOUND)
         rt_value = launch_bin(context);
+    if (rt_value == RET_ERROR) {
+        my_put_stderr(context->args[0]);
+        my_put_stderr(": Command not found.\n");
+    }
     free(context->args);
     context->args = NULL;
-    if (rt_value != NO_CMD_FOUND)
-        return rt_value;
-    return EXIT_SUCCESS_TECH;
+    return rt_value != NO_CMD_FOUND ? rt_value : EXIT_SUCCESS_TECH;
 }
