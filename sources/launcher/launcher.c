@@ -48,6 +48,7 @@ int launch_bin_by_path(shell_t *shell)
 {
     pid_t pid;
     char **env;
+    int child_status;
 
     env = get_env_array(shell);
     pid = fork();
@@ -55,7 +56,13 @@ int launch_bin_by_path(shell_t *shell)
         execve(shell->args[0], shell->args, env);
         exit(EXIT_FAILURE_TECH);
     }
-    waitpid(pid, 0, 0);
+    waitpid(pid, &child_status, 0);
+    if (WIFSIGNALED(child_status) && WTERMSIG(child_status) == SIGSEGV) {
+        my_put_stderr("Segmentation fault");
+        if (WCOREDUMP(child_status))
+            my_put_stderr(" (core dumped)");
+        my_put_stderr("\n");
+    }
     free_env_array(env);
     return EXIT_SUCCESS_TECH;
 }
