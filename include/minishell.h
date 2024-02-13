@@ -12,6 +12,10 @@
     #define EXIT_FAILURE_TECH 84
     #define EXIT_SUCCESS_TECH 0
     #include <stdbool.h>
+    #include <stdlib.h>
+    #ifndef WCOREDUMP
+        #define WCOREDUMP 0
+    #endif
 
     #include "hashtable.h"
 int minishell(__attribute__((unused)) int argc,
