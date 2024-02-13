@@ -21,9 +21,9 @@ char *format_env_var(env_var_t *env_var)
         return NULL;
     if (env_var->value != NULL)
         size_to_alloc = sizeof(char) * (my_strlen(env_var->value)
-            + my_strlen(env_var->key));
+            + my_strlen(env_var->key) + 3);
     else
-        size_to_alloc = sizeof(char) * (my_strlen(env_var->value) + 1);
+        size_to_alloc = sizeof(char) * (my_strlen(env_var->key) + 2);
     rst = malloc(size_to_alloc);
     my_strcpy(rst, env_var->key);
     my_strcat(rst, "=");
