@@ -5,6 +5,7 @@
 ** path_explorer header
 */
 
+#include <dirent.h>
 #include <malloc.h>
 
 #include "../../include/path_explorer.h"
@@ -13,13 +14,40 @@
 #include "../../include/my_printf.h"
 #include "../../include/str_toolbox.h"
 
-char *search_bin(shell_t *context)
+static
+int find_bin_in_dir(char *bin_searched, char *dir_path)
 {
-    char *path = my_strdup(get_env_var(context, "PATH")->value);
+    struct dirent *dirent;
+    DIR *dir;
+    int i;
+
+    dir = opendir(dir_path);
+    if (dir == NULL)
+        return RET_ERROR;
+    dirent = readdir(dir);
+    for (i = 0; dirent != NULL; i += 1) {
+        if (my_strcmp(dirent->d_name, bin_searched) == 0) {
+            closedir(dir);
+            return RET_VALID;
+        }
+        dirent = readdir(dir);
+    }
+    closedir(dir);
+    return RET_ERROR;
+}
+
+char *search_bin(shell_t *shell)
+{
+    char *path = my_strdup(get_env_var(shell, "PATH")->value);
     char *result = my_strtok(path, ':');
+    char *rt;
 
     while (result != NULL) {
-        my_printf("Need to scan folder: %s\n", result);
+        if (find_bin_in_dir(shell->args[0], result) == RET_VALID) {
+            rt = my_strdup(result);
+            free(path);
+            return rt;
+        }
         result = my_strtok(NULL, ':');
     }
     free(path);
