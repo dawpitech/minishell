@@ -41,6 +41,7 @@ int launch_bin_by_env_path(shell_t *shell)
     shell->args[0] = full_path;
     rt_value = launch_bin_by_path(shell);
     free(full_path);
+    free(bin_loc);
     return rt_value;
 }
 
@@ -54,7 +55,7 @@ int launch_bin_by_path(shell_t *shell)
     pid = fork();
     if (pid == 0) {
         execve(shell->args[0], shell->args, env);
-        exit(EXIT_FAILURE_TECH);
+        return RET_ERROR;
     }
     waitpid(pid, &child_status, 0);
     if (WIFSIGNALED(child_status) && WTERMSIG(child_status) == SIGSEGV) {
