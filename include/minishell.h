@@ -31,5 +31,6 @@ typedef struct {
     bool running;
     bool isatty;
     char **args;
+    char *current_path;
 } shell_t;
 #endif //MINISHELL_MINISHELL_H

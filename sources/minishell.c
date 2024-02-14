@@ -18,13 +18,15 @@ int initialize_shell(shell_t *shell, char **env)
         return RET_ERROR;
     shell->running = true;
     shell->isatty = isatty(STDIN_FILENO);
+    shell->current_path = getcwd(NULL, 0);
     return RET_VALID;
 }
 
 static
-void exiting_hook(shell_t *context)
+void exiting_hook(shell_t *shell)
 {
-    free_env_var(context);
+    free(shell->current_path);
+    free_env_var(shell);
 }
 
 int minishell(__attribute__((unused)) int argc,

@@ -8,6 +8,7 @@
 #ifndef MINISHELL_BUILTINS_CMD_H
     #define MINISHELL_BUILTINS_CMD_H
     #include "minishell.h"
+int execute_cd(shell_t *shell);
 int execute_exit(shell_t *context);
 int execute_env(shell_t *context);
 int execute_setenv(shell_t *shell);
