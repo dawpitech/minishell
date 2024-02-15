@@ -24,7 +24,7 @@ char **parse_args(char *input)
     char **args = malloc(sizeof(char *) * nb_of_args);
 
     do {
-        args = realloc(args, sizeof(char *) * (nb_of_args + 1));
+        args = my_realloc(args, sizeof(char *) * (nb_of_args + 1));
         args[nb_of_args - 1] = arg;
         nb_of_args += 1;
         arg = my_strdup(my_strtok(NULL, ' '));
