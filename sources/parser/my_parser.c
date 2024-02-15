@@ -12,14 +12,15 @@
 #include "builtins_runner.h"
 #include "launcher.h"
 #include "mem_toolbox.h"
+#include "my.h"
+#include "my_printf.h"
 #include "str_toolbox.h"
-#include "my_put_stderr.h"
 
 static
 char **parse_args(char *input)
 {
     int nb_of_args = 1;
-    char *arg = my_strtok(input, ' ');
+    char *arg = my_strdup(my_strtok(input, ' '));
     char **args = malloc(sizeof(char *) * nb_of_args);
 
     do {
@@ -27,29 +28,30 @@ char **parse_args(char *input)
             sizeof(char *) * (nb_of_args));
         args[nb_of_args - 1] = arg;
         nb_of_args += 1;
-        arg = my_strtok(NULL, ' ');
+        arg = my_strdup(my_strtok(NULL, ' '));
     } while (arg != NULL);
     args[nb_of_args - 1] = NULL;
     return args;
 }
 
-int parse_input(shell_t *context, char *input)
+static
+int init_parser(shell_t *shell, char *input)
 {
-    int rt_value;
+    int argc;
 
-    context->args = parse_args(input);
-    if (context->args == NULL || context->args[0] == NULL) {
-        free(context->args);
-        return context->args == NULL ? EXIT_FAILURE_TECH : EXIT_SUCCESS_TECH;
+    shell->prompt->argv = parse_args(input);
+    if (shell->prompt->argv == NULL || shell->prompt->argv[0] == NULL) {
+        free(shell->prompt->argv);
+        return shell->prompt->argv == NULL ? RET_ERROR : RET_VALID;
     }
-    rt_value = search_and_run_builtins(context, context->args[0]);
-    if (rt_value == NO_CMD_FOUND)
-        rt_value = launch_bin(context);
-    if (rt_value == RET_ERROR) {
-        my_put_stderr(context->args[0]);
-        my_put_stderr(": Command not found.\n");
-    }
-    free(context->args);
-    context->args = NULL;
-    return rt_value != NO_CMD_FOUND ? rt_value : EXIT_SUCCESS_TECH;
+    for (argc = 0; shell->prompt->argv[argc] != NULL; argc += 1);
+    shell->prompt->argc = argc;
+    return RET_VALID;
+}
+
+int parse_input(shell_t *shell)
+{
+    if (init_parser(shell, shell->prompt->raw_input) == RET_ERROR)
+        return RET_ERROR;
+    return RET_VALID;
 }

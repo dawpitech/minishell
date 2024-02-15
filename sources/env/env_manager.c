@@ -75,7 +75,7 @@ int remove_env_var(shell_t *context, char *key)
     return is_remove ? EXIT_SUCCESS_TECH : EXIT_FAILURE_TECH;
 }
 
-int parse_source_env_var(shell_t *context, char **env)
+int parse_env_var(shell_t *context, char **env)
 {
     char *current_str;
     char *key;

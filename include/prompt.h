@@ -8,5 +8,5 @@
 #ifndef MINISHELL_PROMPT_H
     #define MINISHELL_PROMPT_H
     #include "minishell.h"
-int launch_prompt(shell_t *context);
+int present_prompt(shell_t *shell);
 #endif //MINISHELL_PROMPT_H
