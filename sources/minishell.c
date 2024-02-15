@@ -6,6 +6,7 @@
 */
 
 #include <unistd.h>
+#include <stdio.h>
 
 #include "../include/minishell.h"
 #include "../include/env_manager.h"
@@ -55,8 +56,9 @@ int minishell(__attribute__((unused)) int argc,
     while (shell.running) {
         if (present_prompt(&shell) == RET_ERROR)
             break;
-        parse_input(&shell);
-        run_command(&shell);
+        if (parse_input(&shell) == RET_ERROR)
+            break;
+        shell.last_exit_code = run_command(&shell);
         clean_prompt(&shell);
     }
     exiting_hook(&shell);

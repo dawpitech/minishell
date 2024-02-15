@@ -67,5 +67,5 @@ int launch_bin_by_path(shell_t *shell, __attribute__((unused)) int argc,
         my_put_stderr("\n");
     }
     free_env_array(env);
-    return EXIT_SUCCESS_TECH;
+    return WEXITSTATUS(child_status);
 }
