@@ -9,7 +9,6 @@
 
 #include "../include/minishell.h"
 #include "../include/env_manager.h"
-#include "../include/launcher.h"
 #include "../include/my_parser.h"
 #include "../include/prompt.h"
 #include "../include/runner.h"
@@ -54,7 +53,8 @@ int minishell(__attribute__((unused)) int argc,
     if (initialize_shell(&shell, env) != EXIT_SUCCESS_TECH)
         return EXIT_FAILURE_TECH;
     while (shell.running) {
-        present_prompt(&shell);
+        if (present_prompt(&shell) == RET_ERROR)
+            break;
         parse_input(&shell);
         run_command(&shell);
         clean_prompt(&shell);

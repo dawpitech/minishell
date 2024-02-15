@@ -29,13 +29,16 @@ char *get_from_stdin(void)
     return line;
 }
 
-void present_prompt(shell_t *context)
+int present_prompt(shell_t *shell)
 {
-    context->prompt = malloc(sizeof(prompt_t));
+    shell->prompt = malloc(sizeof(prompt_t));
 
-    if (context->isatty)
-        my_printf("%d> $ ", context->last_exit_code);
-    context->prompt->raw_input = get_from_stdin();
-    if (context->prompt->raw_input == NULL)
-        context->running = false;
+    if (shell->isatty)
+        my_printf("%d> $ ", shell->last_exit_code);
+    shell->prompt->raw_input = get_from_stdin();
+    if (shell->prompt->raw_input != NULL)
+        return RET_VALID;
+    shell->running = false;
+    free(shell->prompt);
+    return RET_ERROR;
 }
