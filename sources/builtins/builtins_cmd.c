@@ -55,7 +55,7 @@ void update_shell_ref(shell_t *shell, char *new_path, char *old_path)
     shell->last_path = old_path;
 }
 
-int execute_cd(shell_t *shell, int argc, char **argv)
+int execute_cd(shell_t *shell, __attribute__((unused)) int argc, char **argv)
 {
     int rt_val;
     char *new_path = compute_cd_path(shell, argv);
@@ -80,7 +80,8 @@ int execute_unsetenv(shell_t *shell, int argc, char **argv)
     return remove_env_var(shell, argv[1]);
 }
 
-int execute_exit(shell_t *shell, int argc, char **argv)
+int execute_exit(shell_t *shell, __attribute__((unused)) int argc,
+    __attribute__((unused)) char **argv)
 {
     shell->running = false;
     return EXIT_SUCCESS_TECH;
@@ -99,7 +100,8 @@ int execute_setenv(shell_t *shell, int argc, char **argv)
     return add_env_var(shell, argv[1], argv[2]);
 }
 
-int execute_env(shell_t *shell, int argc, char **argv)
+int execute_env(shell_t *shell, __attribute__((unused)) int argc,
+    __attribute__((unused)) char **argv)
 {
     env_var_t *curr = shell->env_var;
 

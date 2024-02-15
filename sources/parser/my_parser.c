@@ -24,7 +24,8 @@ char **parse_args(char *input)
     char **args = malloc(sizeof(char *) * nb_of_args);
 
     do {
-        args = my_realloc(args, sizeof(char *) * (nb_of_args + 1));
+        args = my_realloc(args, sizeof(char *) * (nb_of_args + 1),
+            sizeof(char *) * (nb_of_args));
         args[nb_of_args - 1] = arg;
         nb_of_args += 1;
         arg = my_strdup(my_strtok(NULL, ' '));
@@ -50,9 +51,7 @@ int init_parser(shell_t *shell, char *input)
 
 int parse_input(shell_t *shell)
 {
-    int rt_value;
-
     if (init_parser(shell, shell->prompt->raw_input) == RET_ERROR)
         return RET_ERROR;
-
+    return RET_VALID;
 }
