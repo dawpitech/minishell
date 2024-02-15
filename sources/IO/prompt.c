@@ -32,7 +32,8 @@ char *get_from_stdin(void)
 int present_prompt(shell_t *shell)
 {
     shell->prompt = malloc(sizeof(prompt_t));
-
+    if (shell->prompt == NULL)
+        return RET_ERROR;
     if (shell->isatty)
         my_printf("%d> $ ", shell->last_exit_code);
     shell->prompt->raw_input = get_from_stdin();

@@ -8,13 +8,12 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <string.h>
 
 #include "launcher.h"
 #include "env_converter.h"
 #include "my.h"
-#include "path_explorer.h"
 #include "my_printf.h"
+#include "path_explorer.h"
 
 int launch_bin(shell_t *shell)
 {
@@ -57,7 +56,7 @@ int launch_bin_by_path(shell_t *shell, __attribute__((unused)) int argc,
     env = get_env_array(shell);
     pid = fork();
     if (pid == 0) {
-        execve(argv[0],argv, env);
+        execve(argv[0], argv, env);
         return RET_ERROR;
     }
     waitpid(pid, &child_status, 0);
