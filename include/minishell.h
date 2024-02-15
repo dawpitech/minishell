@@ -26,11 +26,18 @@ typedef struct env_var_s {
     struct env_var_s *next;
 } env_var_t;
 typedef struct {
+    char *raw_input;
+    char **argv;
+    int argc;
+} prompt_t;
+typedef struct {
+    prompt_t *prompt;
     env_var_t *env_var;
     int nb_env_var;
     bool running;
     bool isatty;
     char **args;
     char *current_path;
+    char *last_path;
 } shell_t;
 #endif //MINISHELL_MINISHELL_H

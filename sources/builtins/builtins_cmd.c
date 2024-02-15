@@ -5,14 +5,15 @@
 ** exit_cmd header
 */
 
+#include <errno.h>
 #include <stddef.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "builtins_cmd.h"
 #include "env_manager.h"
-#include "my_printf.h"
-#include "my_put_stderr.h"
 #include "my.h"
+#include "my_printf.h"
 
 static
 int calculate_nb_args(shell_t *context)
@@ -23,20 +24,59 @@ int calculate_nb_args(shell_t *context)
     return i;
 }
 
-int execute_cd(shell_t *shell)
+static
+char *compute_cd_path(shell_t *shell)
 {
-    char *new_path = malloc(sizeof(char) * (my_strlen(shell->current_path) + my_strlen(shell->args[1]) + 3));
+    env_var_t *home_var = get_env_var(shell, "HOME");
 
-    my_printf("Old: %s\n", shell->current_path);
-    my_strcpy(new_path, shell->current_path);
-    my_strcat(new_path, "/");
-    my_strcat(new_path, shell->args[1]);
-    my_printf("Computed: %s\n", new_path);
-    chdir(new_path);
+    if (my_strcmp(shell->args[1], "-") == 0)
+        return shell->last_path == NULL ? "\0" : my_strdup(shell->last_path);
+    if (my_strcmp(shell->args[1], "~") == 0) {
+        if (home_var != NULL)
+            return my_strdup(home_var->value);
+        my_put_stderr("Ho $home variable set.\n");
+        return NULL;
+    }
+    return my_strdup(shell->args[1]);
+}
+
+static
+int print_cd_error(char *input)
+{
+    if (input[0] != '\0') {
+        my_put_stderr(input);
+        free(input);
+    }
+    my_put_stderr(": ");
+    my_put_stderr(strerror(errno));
+    my_put_stderr(".\n");
+    return RET_ERROR;
+}
+
+static
+void update_shell_ref(shell_t *shell, char *new_path, char *old_path)
+{
     free(new_path);
     free(shell->current_path);
     shell->current_path = getcwd(NULL, 0);
-    my_printf("Current: %s\n", shell->current_path);
+    if (shell->last_path != NULL)
+        free(shell->last_path);
+    shell->last_path = old_path;
+}
+
+int execute_cd(shell_t *shell)
+{
+    int rt_val;
+    char *new_path = compute_cd_path(shell);
+    char *old_path = getcwd(NULL, 0);
+
+    if (new_path == NULL)
+        return RET_ERROR;
+    errno = 0;
+    rt_val = chdir(new_path);
+    if (rt_val == -1)
+        return print_cd_error(new_path);
+    update_shell_ref(shell, new_path, old_path);
     return RET_VALID;
 }
 

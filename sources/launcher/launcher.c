@@ -40,7 +40,6 @@ int launch_bin_by_env_path(shell_t *shell)
     my_strcat(full_path, shell->args[0]);
     shell->args[0] = full_path;
     rt_value = launch_bin_by_path(shell);
-    free(full_path);
     free(bin_loc);
     return rt_value;
 }
