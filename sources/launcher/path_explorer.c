@@ -43,7 +43,7 @@ char *search_bin(shell_t *shell)
     char *rt;
 
     while (result != NULL) {
-        if (find_bin_in_dir(shell->args[0], result) == RET_VALID) {
+        if (find_bin_in_dir(shell->prompt->argv[0], result) == RET_VALID) {
             rt = my_strdup(result);
             free(path);
             return rt;

@@ -16,28 +16,19 @@
 #include "my_printf.h"
 
 static
-int calculate_nb_args(shell_t *context)
-{
-    int i;
-
-    for (i = 0; context->args[i] != NULL; i += 1);
-    return i;
-}
-
-static
-char *compute_cd_path(shell_t *shell)
+char *compute_cd_path(shell_t *shell, char **argv)
 {
     env_var_t *home_var = get_env_var(shell, "HOME");
 
-    if (my_strcmp(shell->args[1], "-") == 0)
+    if (my_strcmp(argv[1], "-") == 0)
         return shell->last_path == NULL ? "\0" : my_strdup(shell->last_path);
-    if (my_strcmp(shell->args[1], "~") == 0) {
+    if (my_strcmp(argv[1], "~") == 0) {
         if (home_var != NULL)
             return my_strdup(home_var->value);
         my_put_stderr("Ho $home variable set.\n");
         return NULL;
     }
-    return my_strdup(shell->args[1]);
+    return my_strdup(argv[1]);
 }
 
 static
@@ -64,10 +55,10 @@ void update_shell_ref(shell_t *shell, char *new_path, char *old_path)
     shell->last_path = old_path;
 }
 
-int execute_cd(shell_t *shell)
+int execute_cd(shell_t *shell, int argc, char **argv)
 {
     int rt_val;
-    char *new_path = compute_cd_path(shell);
+    char *new_path = compute_cd_path(shell, argv);
     char *old_path = getcwd(NULL, 0);
 
     if (new_path == NULL)
@@ -80,41 +71,37 @@ int execute_cd(shell_t *shell)
     return RET_VALID;
 }
 
-int execute_unsetenv(shell_t *shell)
+int execute_unsetenv(shell_t *shell, int argc, char **argv)
 {
-    int argc = calculate_nb_args(shell);
-
     if (argc < 2) {
         my_put_stderr("unsetenv: Too few arguments.");
         return EXIT_FAILURE_TECH;
     }
-    return remove_env_var(shell, shell->args[1]);
+    return remove_env_var(shell, argv[1]);
 }
 
-int execute_exit(shell_t *context)
+int execute_exit(shell_t *shell, int argc, char **argv)
 {
-    context->running = false;
+    shell->running = false;
     return EXIT_SUCCESS_TECH;
 }
 
-int execute_setenv(shell_t *shell)
+int execute_setenv(shell_t *shell, int argc, char **argv)
 {
-    int argc = calculate_nb_args(shell);
-
     if (argc > 3) {
         my_put_stderr("setenv: Too many arguments.\n");
         return EXIT_FAILURE_TECH;
     }
     if (argc == 1)
-        return execute_env(shell);
+        return execute_env(shell, argc, argv);
     if (argc == 2)
-        return add_env_var(shell, shell->args[1], NULL);
-    return add_env_var(shell, shell->args[1], shell->args[2]);
+        return add_env_var(shell, argv[1], NULL);
+    return add_env_var(shell, argv[1], argv[2]);
 }
 
-int execute_env(shell_t *context)
+int execute_env(shell_t *shell, int argc, char **argv)
 {
-    env_var_t *curr = context->env_var;
+    env_var_t *curr = shell->env_var;
 
     while (curr != NULL) {
         if (curr->value != NULL) {

@@ -12,16 +12,18 @@
 #include "../include/launcher.h"
 #include "../include/my_parser.h"
 #include "../include/prompt.h"
+#include "../include/runner.h"
 
 static
 int initialize_shell(shell_t *shell, char **env)
 {
-    if (parse_source_env_var(shell, env) == RET_ERROR)
+    if (parse_env_var(shell, env) == RET_ERROR)
         return RET_ERROR;
     shell->running = true;
     shell->isatty = isatty(STDIN_FILENO);
     shell->current_path = getcwd(NULL, 0);
     shell->last_path = NULL;
+    shell->last_exit_code = 0;
     return RET_VALID;
 }
 
@@ -37,6 +39,9 @@ void exiting_hook(shell_t *shell)
 static
 void clean_prompt(shell_t *shell)
 {
+    for (int i = 0; shell->prompt->argv[i] != NULL; i += 1)
+        free(shell->prompt->argv[i]);
+    free(shell->prompt->argv);
     free(shell->prompt->raw_input);
     free(shell->prompt);
 }
@@ -51,7 +56,7 @@ int minishell(__attribute__((unused)) int argc,
     while (shell.running) {
         present_prompt(&shell);
         parse_input(&shell);
-        launch_bin(&shell);
+        run_command(&shell);
         clean_prompt(&shell);
     }
     exiting_hook(&shell);

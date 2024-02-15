@@ -36,8 +36,8 @@ typedef struct {
     int nb_env_var;
     bool running;
     bool isatty;
-    char **args;
     char *current_path;
     char *last_path;
+    int last_exit_code;
 } shell_t;
 #endif //MINISHELL_MINISHELL_H

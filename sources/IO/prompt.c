@@ -34,7 +34,7 @@ void present_prompt(shell_t *context)
     context->prompt = malloc(sizeof(prompt_t));
 
     if (context->isatty)
-        my_printf("> $ ");
+        my_printf("%d> $ ", context->last_exit_code);
     context->prompt->raw_input = get_from_stdin();
     if (context->prompt->raw_input == NULL)
         context->running = false;
