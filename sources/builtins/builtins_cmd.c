@@ -25,7 +25,7 @@ char *compute_cd_path(shell_t *shell, char **argv)
     if (my_strcmp(argv[1], "~") == 0) {
         if (home_var != NULL)
             return my_strdup(home_var->value);
-        my_put_stderr("Ho $home variable set.\n");
+        my_put_stderr("No $home variable set.\n");
         return NULL;
     }
     return my_strdup(argv[1]);
