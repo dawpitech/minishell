@@ -62,5 +62,5 @@ int minishell(__attribute__((unused)) int argc,
         clean_prompt(&shell);
     }
     exiting_hook(&shell);
-    return EXIT_SUCCESS_TECH;
+    return shell.last_exit_code;
 }
