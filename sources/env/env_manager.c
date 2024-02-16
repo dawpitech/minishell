@@ -5,12 +5,11 @@
 ** env_manager header
 */
 
-#include <malloc.h>
 #include <stddef.h>
+#include <string.h>
 
 #include "../../include/env_manager.h"
 #include "../../include/my.h"
-#include "../../include/str_toolbox.h"
 
 static
 void mov_ptr_to_delete(env_var_t *prev, env_var_t *curr, shell_t *context)
@@ -83,8 +82,8 @@ int parse_env_var(shell_t *context, char **env)
 
     for (int i = 0; env[i] != NULL; i += 1) {
         current_str = my_strdup(env[i]);
-        key = my_strtok(current_str, '=');
-        value = my_strtok(NULL, '=');
+        key = strtok(current_str, "=");
+        value = strtok(NULL, "=");
         if (add_env_var(context, key, value) == EXIT_FAILURE_TECH)
             return EXIT_FAILURE_TECH;
         free(current_str);

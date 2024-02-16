@@ -5,22 +5,18 @@
 ** my_parser header
 */
 
-#include <malloc.h>
+#include <string.h>
 
 #include "my_parser.h"
 #include "builtins.h"
-#include "builtins_runner.h"
-#include "launcher.h"
 #include "mem_toolbox.h"
 #include "my.h"
-#include "my_printf.h"
-#include "str_toolbox.h"
 
 static
 char **parse_args(char *input)
 {
     int nb_of_args = 1;
-    char *arg = my_strdup(my_strtok(input, ' '));
+    char *arg = my_strdup(strtok(input, " \t"));
     char **args = malloc(sizeof(char *) * nb_of_args);
 
     do {
@@ -28,7 +24,7 @@ char **parse_args(char *input)
             sizeof(char *) * (nb_of_args));
         args[nb_of_args - 1] = arg;
         nb_of_args += 1;
-        arg = my_strdup(my_strtok(NULL, ' '));
+        arg = my_strdup(strtok(NULL, " \t"));
     } while (arg != NULL);
     args[nb_of_args - 1] = NULL;
     return args;

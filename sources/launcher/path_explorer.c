@@ -6,13 +6,12 @@
 */
 
 #include <dirent.h>
-#include <malloc.h>
+#include <string.h>
 
 #include "../../include/path_explorer.h"
 #include "../../include/env_manager.h"
 #include "../../include/my.h"
 #include "../../include/my_printf.h"
-#include "../../include/str_toolbox.h"
 
 static
 int find_bin_in_dir(char *bin_searched, char *dir_path)
@@ -39,7 +38,7 @@ int find_bin_in_dir(char *bin_searched, char *dir_path)
 char *search_bin(shell_t *shell)
 {
     char *path = my_strdup(get_env_var(shell, "PATH")->value);
-    char *result = my_strtok(path, ':');
+    char *result = strtok(path, ":");
     char *rt;
 
     while (result != NULL) {
@@ -48,7 +47,7 @@ char *search_bin(shell_t *shell)
             free(path);
             return rt;
         }
-        result = my_strtok(NULL, ':');
+        result = strtok(NULL, ":");
     }
     free(path);
     return NULL;

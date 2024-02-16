@@ -38,7 +38,6 @@ SRC	+=	./sources/parser/my_parser.c
 SRC	+=	./sources/builtins/builtins_cmd.c
 SRC	+=	./sources/builtins/builtins_runner.c
 SRC	+=	./sources/IO/prompt.c
-SRC	+=	./sources/utils/str_toolbox.c
 SRC	+=	./sources/utils/mem_toolbox.c
 SRC	+=	./sources/utils/my_put_stderr.c
 SRC	+=	./sources/launcher/launcher.c
