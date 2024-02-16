@@ -72,7 +72,7 @@ int remove_env_var(shell_t *context, char *key)
     }
     if (is_remove)
         context->nb_env_var -= 1;
-    return is_remove ? EXIT_SUCCESS_TECH : EXIT_FAILURE_TECH;
+    return is_remove ? RET_VALID : RET_ERROR;
 }
 
 int parse_env_var(shell_t *context, char **env)
