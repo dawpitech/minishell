@@ -75,9 +75,11 @@ int execute_unsetenv(shell_t *shell, int argc, char **argv)
 {
     if (argc < 2) {
         my_put_stderr("unsetenv: Too few arguments.");
-        return EXIT_FAILURE_TECH;
+        return 1;
     }
-    return remove_env_var(shell, argv[1]);
+    for (int i = 1; i < argc; i += 1)
+        remove_env_var(shell, argv[i]);
+    return 0;
 }
 
 int execute_exit(shell_t *shell, __attribute__((unused)) int argc,
