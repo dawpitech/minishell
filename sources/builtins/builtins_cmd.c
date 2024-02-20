@@ -101,6 +101,13 @@ int execute_setenv(shell_t *shell, int argc, char **argv)
     }
     if (argc == 1)
         return execute_env(shell, argc, argv);
+    for (int i = 0; argv[1][i] != '\0'; i += 1) {
+        if (!IS_ALPHANUM(argv[1][i])) {
+            my_put_stderr("setenv: Variable name must contain "
+                "alphanumeric characters.\n");
+            return EXIT_FAILURE_TECH;
+        }
+    }
     if (argc == 2)
         return add_env_var(shell, argv[1], NULL);
     return add_env_var(shell, argv[1], argv[2]);
