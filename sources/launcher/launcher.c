@@ -46,12 +46,28 @@ int launch_bin_by_env_path(shell_t *shell, int argc, char **argv)
     return rt_value;
 }
 
+static
+int compute_return_code(int child_status)
+{
+    if (WIFSIGNALED(child_status) && WTERMSIG(child_status) == SIGSEGV) {
+        my_put_stderr("Segmentation fault");
+        if (WCOREDUMP(child_status))
+            my_put_stderr(" (core dumped)");
+        my_put_stderr("\n");
+    }
+    if (WIFSIGNALED(child_status) && WTERMSIG(child_status) != SIGSEGV) {
+        return WTERMSIG(child_status) + SIGN_ERROR_CODE_OFFSET;
+    }
+    return WEXITSTATUS(child_status);
+}
+
 int launch_bin_by_path(shell_t *shell, __attribute__((unused)) int argc,
     char **argv)
 {
     pid_t pid;
     char **env;
     int child_status;
+    int rt_value;
 
     env = get_env_array(shell);
     pid = fork();
@@ -60,12 +76,7 @@ int launch_bin_by_path(shell_t *shell, __attribute__((unused)) int argc,
         return RET_ERROR;
     }
     waitpid(pid, &child_status, 0);
-    if (WIFSIGNALED(child_status) && WTERMSIG(child_status) == SIGSEGV) {
-        my_put_stderr("Segmentation fault");
-        if (WCOREDUMP(child_status))
-            my_put_stderr(" (core dumped)");
-        my_put_stderr("\n");
-    }
+    rt_value = compute_return_code(child_status);
     free_env_array(env);
-    return WEXITSTATUS(child_status);
+    return rt_value;
 }

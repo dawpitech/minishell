@@ -11,6 +11,7 @@
     #define RET_VALID 0
     #define EXIT_FAILURE_TECH 84
     #define EXIT_SUCCESS_TECH 0
+    #define SIGN_ERROR_CODE_OFFSET 128
     #include <stdbool.h>
     #include <stdlib.h>
     #ifndef WCOREDUMP
