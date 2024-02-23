@@ -63,4 +63,4 @@ dkms.conf
 # Custom
 mysh
 unit_tests
-segfault.bin
+*.bin

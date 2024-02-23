@@ -30,6 +30,7 @@ T_BDIR	=	.buildTests
 NAME	=	mysh
 T_NAME	=	unit_tests
 SEGFAULT_NAME	=	segfault.bin
+FP_EXECP_NAME	=	floating.bin
 
 SRC = ./sources/minishell.c
 SRC	+=	./sources/env/env_manager.c
@@ -96,6 +97,7 @@ fclean:	clean
 	@ rm -f $(NAME)
 	@ rm -f $(T_NAME)
 	@ rm -f $(SEGFAULT_NAME)
+	@ rm -f $(FP_EXECP_NAME)
 	@ make -C ./lib/my/ fclean
 	@ make -C ./lib/hashtable/ fclean
 
@@ -104,4 +106,8 @@ re:	fclean all
 segfault:
 	$(CC) bonus/segfault.c -o $(SEGFAULT_NAME)
 
+floating:
+	$(CC) bonus/fp_exception.c -o $(FP_EXECP_NAME)
+
 .PHONY : all asan tests_run_pp tests_run build_lib clean fclean re segfault
+.PHONY : floating

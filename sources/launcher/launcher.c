@@ -49,14 +49,15 @@ int launch_bin_by_env_path(shell_t *shell, int argc, char **argv)
 static
 int compute_return_code(int child_status)
 {
-    if (WIFSIGNALED(child_status) && WTERMSIG(child_status) == SIGSEGV) {
-        my_put_stderr("Segmentation fault");
+    if (WIFSIGNALED(child_status)) {
+        if (WTERMSIG(child_status) == SIGSEGV)
+            my_put_stderr("Segmentation fault");
+        if (WTERMSIG(child_status) == SIGILL)
+            my_put_stderr("Illegal instruction");
         if (WCOREDUMP(child_status))
             my_put_stderr(" (core dumped)");
         my_put_stderr("\n");
-    }
-    if (WIFSIGNALED(child_status) && WTERMSIG(child_status) != SIGSEGV) {
-        return WTERMSIG(child_status) + SIGN_ERROR_CODE_OFFSET;
+        return child_status;
     }
     return WEXITSTATUS(child_status);
 }
