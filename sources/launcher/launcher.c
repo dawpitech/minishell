@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "launcher.h"
 #include "env_converter.h"
@@ -50,10 +51,7 @@ static
 int compute_return_code(int child_status)
 {
     if (WIFSIGNALED(child_status)) {
-        if (WTERMSIG(child_status) == SIGSEGV)
-            my_put_stderr("Segmentation fault");
-        if (WTERMSIG(child_status) == SIGILL)
-            my_put_stderr("Illegal instruction");
+        my_put_stderr(strsignal(WTERMSIG(child_status)));
         if (WCOREDUMP(child_status))
             my_put_stderr(" (core dumped)");
         my_put_stderr("\n");
