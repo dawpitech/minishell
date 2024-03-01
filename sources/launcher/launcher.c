@@ -9,12 +9,14 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 
 #include "launcher.h"
 #include "env_converter.h"
 #include "my.h"
 #include "my_printf.h"
 #include "path_explorer.h"
+#include "my_put_stderr.h"
 
 int launch_bin(shell_t *shell)
 {
@@ -72,7 +74,8 @@ int launch_bin_by_path(shell_t *shell, __attribute__((unused)) int argc,
     pid = fork();
     if (pid == 0) {
         execve(argv[0], argv, env);
-        return RET_ERROR;
+        print_error_with_input(argv[0]);
+        exit(1);
     }
     waitpid(pid, &child_status, 0);
     rt_value = compute_return_code(child_status);

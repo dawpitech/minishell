@@ -14,6 +14,7 @@
 #include "env_manager.h"
 #include "my.h"
 #include "my_printf.h"
+#include "my_put_stderr.h"
 
 static
 char *compute_cd_path(shell_t *shell, int argc, char **argv)
@@ -33,19 +34,6 @@ char *compute_cd_path(shell_t *shell, int argc, char **argv)
     if (my_strcmp(argv[1], "-") == 0)
         return shell->last_path == NULL ? "\0" : my_strdup(shell->last_path);
     return my_strdup(argv[1]);
-}
-
-static
-int print_cd_error(char *input)
-{
-    if (input[0] != '\0') {
-        my_put_stderr(input);
-        free(input);
-    }
-    my_put_stderr(": ");
-    my_put_stderr(strerror(errno));
-    my_put_stderr(".\n");
-    return RET_ERROR;
 }
 
 static
@@ -70,7 +58,7 @@ int execute_cd(shell_t *shell, __attribute__((unused)) int argc, char **argv)
     errno = 0;
     rt_val = chdir(new_path);
     if (rt_val == -1)
-        return print_cd_error(new_path);
+        return print_error_with_input(new_path);
     update_shell_ref(shell, new_path, old_path);
     return RET_VALID;
 }
